@@ -30,10 +30,10 @@ public class PlainMarkConvertor extends AbstractMarkConvertor{
 	}
 
 	@Override
-	protected StringBuffer concatInfoArray(List<StringBuffer> infoArray) {
-		StringBuffer plainTxt = new StringBuffer();
+	protected StringBuilder concatInfoArray(List<StringBuilder> infoArray) {
+		StringBuilder plainTxt = new StringBuilder();
 
-		for(StringBuffer info : infoArray){
+		for(StringBuilder info : infoArray){
 			plainTxt.append(info.toString());
 			plainTxt.append("\n");
 		}

@@ -31,8 +31,8 @@ public class HtmlMarkConvertor extends AbstractMarkConvertor {
 	}
 
 	@Override
-	protected StringBuffer concatInfoArray(List<StringBuffer> infoArray) {
-		StringBuffer html = new StringBuffer();
+	protected StringBuilder concatInfoArray(List<StringBuilder> infoArray) {
+		StringBuilder html = new StringBuilder();
 		html.append("<html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en'>");
 		html.append("<head>");
 		html.append("<meta http-equiv='Content-Type' content='text/html;charset=UTF-8' />");
@@ -46,7 +46,7 @@ public class HtmlMarkConvertor extends AbstractMarkConvertor {
 		html.append("<body>");
 		html.append("<div class='content' style='border: 1px solid #ccc;    font-size: 12px;'>");
 
-		for(StringBuffer info : infoArray){
+		for(StringBuilder info : infoArray){
 			html.append(info.toString());
 			html.append("</br>");
 		}

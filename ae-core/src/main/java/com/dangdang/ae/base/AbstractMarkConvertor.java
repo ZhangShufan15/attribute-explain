@@ -50,8 +50,8 @@ public abstract class AbstractMarkConvertor implements IMarkConvertor {
 	}
 	
 	@Override
-	public String convert(List<StringBuffer> infoArray) {
-		StringBuffer info =  concatInfoArray(infoArray);
+	public String convert(List<StringBuilder> infoArray) {
+		StringBuilder info =  concatInfoArray(infoArray);
 		
 		return replaceMarkKey(info.toString());
 	}
@@ -59,7 +59,7 @@ public abstract class AbstractMarkConvertor implements IMarkConvertor {
 	
 	protected abstract void initKeyReplaceValue();
 	
-	protected abstract StringBuffer concatInfoArray(List<StringBuffer> infoArray);
+	protected abstract StringBuilder concatInfoArray(List<StringBuilder> infoArray);
 	
 	protected abstract String replaceMarkKey(String html);
 }

@@ -9,5 +9,5 @@ import java.util.List;
  *
  */
 public interface IMarkConvertor {
-	String convert(List<StringBuffer> infoArray);
+	String convert(List<StringBuilder> infoArray);
 }

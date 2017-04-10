@@ -48,12 +48,12 @@ public class AttributeExplainPrinter {
 	}
 	
 	public String getExplainInfo(Object target){
-		List<StringBuffer> infoArray =  explain(target);
+		List<StringBuilder> infoArray =  explain(target);
 		return markConvertor.convert(infoArray);
 	}
 	
-	public static List<StringBuffer> explain(Object target){
-		List<StringBuffer> infoList = new ArrayList<>();
+	public static List<StringBuilder> explain(Object target){
+		List<StringBuilder> infoList = new ArrayList<>();
 		List<Field> fieldArray = getAllFields(target.getClass());
 		for(Field field : fieldArray){
 			if(field.getName().equals("serialVersionUID")){
@@ -74,13 +74,13 @@ public class AttributeExplainPrinter {
 		return infoList;
 	}
 	
-	private static void processArray(Field field, Object target, List<StringBuffer> infoList){
+	private static void processArray(Field field, Object target, List<StringBuilder> infoList){
 		Object o = getValueByField(field, target);
         
         if(field.getAnnotation(AttributeExplain.class) != null){
 			infoList.add(createAnnotationInfo(field));
 		}
-        StringBuffer aInfo = new StringBuffer();
+        StringBuilder aInfo = new StringBuilder();
 		aInfo.append(QUADRI_SPACE);
         aInfo.append(createKeyInfo(field));
         aInfo.append(" => ");
@@ -98,8 +98,8 @@ public class AttributeExplainPrinter {
         	}
         	
         	for(Object obj : array){
-            	List<StringBuffer> childInfoList = explain(obj);
-            	StringBuffer aInfo1 = new StringBuffer();
+            	List<StringBuilder> childInfoList = explain(obj);
+            	StringBuilder aInfo1 = new StringBuilder();
             	
             	//集合内为普通数据类型时，直接按照数组样式输出
             	if(isPrimitiveType(obj.getClass()) || obj.getClass().equals(Object.class)){
@@ -116,7 +116,7 @@ public class AttributeExplainPrinter {
 				aInfo1.append(createStartBraceInfo());
 				infoList.add(aInfo1);
 				
-				for(StringBuffer childInfo : childInfoList){
+				for(StringBuilder childInfo : childInfoList){
 					childInfo.insert(0, QUADRI_SPACE).insert(0, QUADRI_SPACE);
 				}
 				infoList.addAll(childInfoList);
@@ -129,13 +129,13 @@ public class AttributeExplainPrinter {
 	}
 	
 	@SuppressWarnings("rawtypes")
-	private static void processMap(Field field, Object target, List<StringBuffer> infoList){
+	private static void processMap(Field field, Object target, List<StringBuilder> infoList){
 		Object o = getValueByField(field, target);
         
         if(field.getAnnotation(AttributeExplain.class) != null){
 			infoList.add(createAnnotationInfo(field));
 		}
-        StringBuffer aInfo = new StringBuffer();
+        StringBuilder aInfo = new StringBuilder();
 		aInfo.append(QUADRI_SPACE);
         aInfo.append(createKeyInfo(field));
         aInfo.append(" => ");
@@ -151,7 +151,7 @@ public class AttributeExplainPrinter {
 			Iterator<Entry> it = array.entrySet().iterator();
             while(it.hasNext()){
             	Entry obj = it.next();
-            	StringBuffer aInfo1 = new StringBuffer();
+            	StringBuilder aInfo1 = new StringBuilder();
             	
             	//集合内为普通数据类型时，直接按照数组样式输出
             	if(isPrimitiveType(obj.getValue().getClass()) || obj.getValue().getClass().equals(Object.class)){
@@ -163,7 +163,7 @@ public class AttributeExplainPrinter {
             		break;
             	}
             	
-            	List<StringBuffer> childInfoList = explain(obj.getValue());
+            	List<StringBuilder> childInfoList = explain(obj.getValue());
             	
 				aInfo1.append(QUADRI_SPACE).append(QUADRI_SPACE);
 				aInfo1.append(KEY_START_KEY);
@@ -173,7 +173,7 @@ public class AttributeExplainPrinter {
 				aInfo1.append(createStartBraceInfo());
 				infoList.add(aInfo1);
 				
-				for(StringBuffer childInfo : childInfoList){
+				for(StringBuilder childInfo : childInfoList){
 					childInfo.insert(0, QUADRI_SPACE).insert(0, QUADRI_SPACE);
 				}
 				infoList.addAll(childInfoList);
@@ -185,20 +185,20 @@ public class AttributeExplainPrinter {
 		infoList.add(createEndBraceInfo());
 	}
 	
-	private static void processSelfDefinedClass(Field field, Object target, List<StringBuffer> infoList){
+	private static void processSelfDefinedClass(Field field, Object target, List<StringBuilder> infoList){
 		if(field.getAnnotation(AttributeExplain.class) != null){
 			infoList.add(createAnnotationInfo(field));
 		}
 		Object o = getValueByField(field, target);
-		StringBuffer aInfo = new StringBuffer();
+		StringBuilder aInfo = new StringBuilder();
 		aInfo.append(QUADRI_SPACE);
         aInfo.append(createKeyInfo(field));
 		aInfo.append(" => ");
 		aInfo.append(createStartBraceInfo());
 		infoList.add(aInfo);
 		if(o != null){
-			List<StringBuffer> childInfoList = explain(o);
-			for(StringBuffer childInfo : childInfoList){
+			List<StringBuilder> childInfoList = explain(o);
+			for(StringBuilder childInfo : childInfoList){
 				childInfo.insert(0, QUADRI_SPACE);
 			}
 			
@@ -208,11 +208,11 @@ public class AttributeExplainPrinter {
 		infoList.add(createEndBraceInfo());
 	}
 	
-	private static void processBasics(Field field, Object target, List<StringBuffer> infoList){
+	private static void processBasics(Field field, Object target, List<StringBuilder> infoList){
 		if(field.getAnnotation(AttributeExplain.class) != null){
 			infoList.add(createAnnotationInfo(field));
 		}
-		StringBuffer aInfo = new StringBuffer();
+		StringBuilder aInfo = new StringBuilder();
 		aInfo.append(QUADRI_SPACE);
 		aInfo.append(createKeyInfo(field));
 		aInfo.append(" => ");
@@ -255,8 +255,8 @@ public class AttributeExplainPrinter {
         return o;
 	}
 	
-	private static StringBuffer createAnnotationInfo(Field field){
-		StringBuffer sbuffer = new StringBuffer();
+	private static StringBuilder createAnnotationInfo(Field field){
+		StringBuilder sbuffer = new StringBuilder();
 		sbuffer.append(QUADRI_SPACE);
 		sbuffer.append(COMMENT_START_KEY);
 		sbuffer.append("//");
@@ -265,8 +265,8 @@ public class AttributeExplainPrinter {
 		return sbuffer;
 	}
 	
-	private static StringBuffer createStartBraceInfo(){
-		StringBuffer sbuffer = new StringBuffer();
+	private static StringBuilder createStartBraceInfo(){
+		StringBuilder sbuffer = new StringBuilder();
 		sbuffer.append(EMBRACE_START_KEY);
 		sbuffer.append("(");
 		sbuffer.append(EMBRACE_END_KEY);
@@ -274,16 +274,16 @@ public class AttributeExplainPrinter {
 		return sbuffer;
 	}
 	
-	private static StringBuffer createEndBraceInfo(){
-		StringBuffer sbuffer = new StringBuffer();
+	private static StringBuilder createEndBraceInfo(){
+		StringBuilder sbuffer = new StringBuilder();
 		sbuffer.append(QUADRI_SPACE);
 		sbuffer.append(EMBRACE_START_KEY);
 		sbuffer.append(")");
 		sbuffer.append(EMBRACE_END_KEY);
 		return sbuffer;
 	}
-	private static StringBuffer createEndBraceDoubleSpaceInfo(){
-		StringBuffer sbuffer = new StringBuffer();
+	private static StringBuilder createEndBraceDoubleSpaceInfo(){
+		StringBuilder sbuffer = new StringBuilder();
 		sbuffer.append(QUADRI_SPACE).append(QUADRI_SPACE);
 		sbuffer.append(EMBRACE_START_KEY);
 		sbuffer.append(")");
@@ -291,16 +291,16 @@ public class AttributeExplainPrinter {
 		return sbuffer;
 	}
 	
-	private static StringBuffer createKeyInfo(Field field){
-		StringBuffer sbuffer = new StringBuffer();
+	private static StringBuilder createKeyInfo(Field field){
+		StringBuilder sbuffer = new StringBuilder();
 		sbuffer.append(KEY_START_KEY);
 		sbuffer.append(field.getName());
 		sbuffer.append(KEY_END_KEY);
 		return sbuffer;
 	}
 	
-	private static StringBuffer createValueInfo(Object o){
-		StringBuffer sbuffer = new StringBuffer();
+	private static StringBuilder createValueInfo(Object o){
+		StringBuilder sbuffer = new StringBuilder();
 		sbuffer.append(VALUE_START_KEY);
         if(o != null){
         	sbuffer.append(o);
@@ -311,8 +311,8 @@ public class AttributeExplainPrinter {
         return sbuffer;
 	}
 	
-	private static StringBuffer array2String(Object[] array){
-		StringBuffer sbuffer = new StringBuffer();
+	private static StringBuilder array2String(Object[] array){
+		StringBuilder sbuffer = new StringBuilder();
 		sbuffer.append("[");
 		if(array != null){
 			for(Object obj : array){
